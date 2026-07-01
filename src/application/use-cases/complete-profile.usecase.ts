@@ -28,7 +28,7 @@ export class CompleteProfileUseCase {
         name,
       });
 
-      await this.userRepository.update(user);
+      await this.userRepository.save(user);
 
       const exportedUser = user.export();
 
@@ -36,7 +36,7 @@ export class CompleteProfileUseCase {
         id: exportedUser.id,
         name: exportedUser.name!.getValue(),
         email: exportedUser.email.getValue(),
-        isProfileComplete: exportedUser.isProfileComplete,
+        isProfileCompleted: exportedUser.isProfileCompleted,
       };
     } catch (error: unknown) {
       console.log("complete-profile-usecase error: ", error);

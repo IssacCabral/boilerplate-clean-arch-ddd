@@ -11,5 +11,5 @@ export interface UserProps extends Timestamps {
   phoneNumber?: PhoneNumber;
   documentNumber?: DocumentNumber;
   avatarUrl?: string;
-  isProfileComplete: boolean;
+  isProfileCompleted: boolean;
 }

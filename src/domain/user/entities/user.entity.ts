@@ -26,7 +26,7 @@ export class UserEntity extends AbstractEntity<UserProps> {
     return new UserEntity({
       id: props.id,
       email: props.email,
-      isProfileComplete: false,
+      isProfileCompleted: false,
       createdAt: now,
       updatedAt: now,
     });
@@ -36,15 +36,29 @@ export class UserEntity extends AbstractEntity<UserProps> {
     return new UserEntity(props);
   }
 
+  // changeName(name: string): Either<IError, void> {
+  //   if (name.)
+  // }
+
+  deactivate(): Either<IError, void> {
+    if (this.props.isProfileCompleted) {
+      return left(ProfileAlreadyCompleted);
+    }
+
+    this.props.isProfileCompleted = false;
+    this.touch();
+    return right(undefined);
+  }
+
   completeProfile(data: CompleteProfileProps): Either<IError, void> {
-    if (this.props.isProfileComplete) {
+    if (this.props.isProfileCompleted) {
       return left(ProfileAlreadyCompleted);
     }
 
     this.props.name = data.name;
     this.props.phoneNumber = data.phoneNumber;
     this.props.documentNumber = data.documentNumber;
-    this.props.isProfileComplete = true;
+    this.props.isProfileCompleted = true;
     this.touch();
 
     return right(undefined);
