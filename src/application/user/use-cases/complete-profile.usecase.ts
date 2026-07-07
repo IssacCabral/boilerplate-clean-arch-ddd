@@ -2,10 +2,10 @@ import {
   CompleteProfileDto,
   CompleteProfileOutput,
 } from "../dto/complete-profile.dto";
-import { PhoneNumber } from "../../domain/user/value-objects/phone-number.vo";
-import { DocumentNumber } from "../../domain/user/value-objects/document-number.vo";
-import { UserRepository } from "../../domain/user/repositories/user.repository";
-import { UserName } from "../../domain/user/value-objects/user-name.vo";
+import { PhoneNumber } from "../../../domain/user/value-objects/phone-number.vo";
+import { DocumentNumber } from "../../../domain/user/value-objects/document-number.vo";
+import { UserRepository } from "../../../domain/user/repositories/user.repository";
+import { UserName } from "../../../domain/user/value-objects/user-name.vo";
 
 export class CompleteProfileUseCase {
   constructor(private readonly userRepository: UserRepository) {}
