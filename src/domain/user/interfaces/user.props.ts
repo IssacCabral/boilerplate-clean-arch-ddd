@@ -1,4 +1,4 @@
-import { Timestamps } from "../../shared/timestamps.shared";
+import { Timestamps } from "../../@shared/timestamps.shared";
 import { Email } from "../value-objects/email.vo";
 import { UserName } from "../value-objects/user-name.vo";
 import { PhoneNumber } from "../value-objects/phone-number.vo";

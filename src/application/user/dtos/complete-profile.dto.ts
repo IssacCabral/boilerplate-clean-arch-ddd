@@ -10,5 +10,5 @@ export interface CompleteProfileOutput {
   id: string;
   name: string;
   email: string;
-  isProfileComplete: boolean;
+  isProfileCompleted: boolean;
 }

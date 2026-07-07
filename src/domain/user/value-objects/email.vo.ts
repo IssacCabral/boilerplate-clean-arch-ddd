@@ -1,4 +1,4 @@
-import { AbstractValueObject } from "../../shared/abstract.vo.shared";
+import { AbstractValueObject } from "../../@shared/abstract.vo.shared";
 
 export class Email extends AbstractValueObject<string> {
   static create(email: string): Email {

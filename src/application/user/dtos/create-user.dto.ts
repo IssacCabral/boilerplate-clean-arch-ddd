@@ -1,5 +1,5 @@
-import { Either } from "../../../domain/shared/either.shared";
-import { IError } from "../../../domain/shared/error.shared";
+import { Either } from "../../../domain/@shared/either.shared";
+import { IError } from "../../../domain/@shared/error.shared";
 
 export interface CreateUserInputDto {
   email: string;

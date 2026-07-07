@@ -1,4 +1,4 @@
-import { IError } from "../../../domain/shared/error.shared";
+import { IError } from "../../../domain/@shared/error.shared";
 
 export const UserNotFoundError: IError = {
   code: "USR-A-002",

@@ -1,7 +1,7 @@
 import {
   CompleteProfileDto,
   CompleteProfileOutput,
-} from "../dto/complete-profile.dto";
+} from "../dtos/complete-profile.dto";
 import { PhoneNumber } from "../../../domain/user/value-objects/phone-number.vo";
 import { DocumentNumber } from "../../../domain/user/value-objects/document-number.vo";
 import { UserRepository } from "../../../domain/user/repositories/user.repository";
@@ -44,7 +44,7 @@ export class CompleteProfileUseCase {
         id: "",
         name: "",
         email: "",
-        isProfileComplete: false,
+        isProfileCompleted: false,
       };
     }
   }
