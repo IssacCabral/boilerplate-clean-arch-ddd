@@ -13,8 +13,5 @@ export type CreateUserOutputDto = Either<
   {
     id: string;
     email: string;
-    name: string;
-    phone: string;
-    document: string;
   }
 >;
