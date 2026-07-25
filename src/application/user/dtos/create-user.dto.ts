@@ -3,9 +3,7 @@ import { IError } from "../../../@shared/error.shared";
 
 export interface CreateUserInputDto {
   email: string;
-  name: string;
-  phone: string;
-  document: string;
+  password: string;
 }
 
 export type CreateUserOutputDto = Either<

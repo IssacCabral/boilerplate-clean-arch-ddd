@@ -8,12 +8,18 @@ import { UserRepository } from "../../../domain/user/repositories/user.repositor
 import { UserAlreadyExists } from "../errors/user-already-exists.error";
 import { UserEntity } from "../../../domain/user/entities/user.entity";
 import { Email } from "../../../domain/user/value-objects/email.vo";
+import { PasswordHash } from "../../../domain/user/value-objects/password-hash.vo";
+import { Password } from "../../../domain/user/value-objects/password.vo";
+import { PasswordHasher } from "../../ports/password-hasher.port";
 
 export class CreateUserUseCase implements UseCase<
   CreateUserInputDto,
   CreateUserOutputDto
 > {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly passwordHasher: PasswordHasher,
+  ) {}
 
   async exec(input: CreateUserInputDto): Promise<CreateUserOutputDto> {
     try {
@@ -22,11 +28,14 @@ export class CreateUserUseCase implements UseCase<
         return left(UserAlreadyExists);
       }
 
-      const email = Email.create(input.email);
+      const password = Password.create(input.password);
+      const hashedPassword = this.passwordHasher.hash(password.getValue());
+      const passwordHash = PasswordHash.create(hashedPassword);
 
       const user = UserEntity.create({
         id: Math.random().toString(36).substring(2, 15).toString(),
-        email,
+        email: Email.create(input.email),
+        passwordHash,
       });
 
       await this.userRepository.create(user);

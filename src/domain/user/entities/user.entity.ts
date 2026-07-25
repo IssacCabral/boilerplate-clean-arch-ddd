@@ -8,7 +8,10 @@ import { PhoneNumber } from "../value-objects/phone-number.vo";
 import { DocumentNumber } from "../value-objects/document-number.vo";
 import { UserStatus } from "../enums/user-status.enum";
 
-export type CreateUserEntityProps = Pick<UserProps, "id" | "email"> & {
+export type CreateUserEntityProps = Pick<
+  UserProps,
+  "id" | "email" | "passwordHash"
+> & {
   avatarUrl?: string;
   name?: UserName;
   phoneNumber?: PhoneNumber;
@@ -27,6 +30,7 @@ export class UserEntity extends AbstractEntity<UserProps> {
     return new UserEntity({
       id: props.id,
       email: props.email,
+      passwordHash: props.passwordHash,
       isProfileCompleted: false,
       status: UserStatus.Active,
       createdAt: now,

@@ -1,5 +1,5 @@
-import { UserEntity } from "../../domain/user/entities/user.entity";
-import { UserRepository } from "../../domain/user/repositories/user.repository";
+import { UserEntity } from "../../../../domain/user/entities/user.entity";
+import { UserRepository } from "../../../../domain/user/repositories/user.repository";
 
 export class MemoryUserRepository implements UserRepository {
   private users: UserEntity[] = [];
