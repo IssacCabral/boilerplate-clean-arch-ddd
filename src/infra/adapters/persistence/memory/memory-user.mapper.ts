@@ -1,9 +1,9 @@
-import { UserEntity } from "../../domain/user/entities/user.entity";
-import { UserProps } from "../../domain/user/interfaces/user.props";
-import { DocumentNumber } from "../../domain/user/value-objects/document-number.vo";
-import { Email } from "../../domain/user/value-objects/email.vo";
-import { PhoneNumber } from "../../domain/user/value-objects/phone-number.vo";
-import { UserName } from "../../domain/user/value-objects/user-name.vo";
+import { UserEntity } from "../../../../domain/user/entities/user.entity";
+import { UserProps } from "../../../../domain/user/interfaces/user.props";
+import { DocumentNumber } from "../../../../domain/user/value-objects/document-number.vo";
+import { Email } from "../../../../domain/user/value-objects/email.vo";
+import { PhoneNumber } from "../../../../domain/user/value-objects/phone-number.vo";
+import { UserName } from "../../../../domain/user/value-objects/user-name.vo";
 
 // todo: verificar, pois recebe como já UserProps que já vem com value objects
 export class MemoryUserMapper {
@@ -11,6 +11,8 @@ export class MemoryUserMapper {
     return UserEntity.hydrate({
       id: raw.id,
       email: Email.create(raw.email.getValue()), // todo: verificar, pois recebe como Email
+      passwordHash: raw.passwordHash,
+      status: raw.status,
       name: raw.name ? UserName.create(raw.name.getValue()) : undefined,
       phoneNumber: raw.phoneNumber
         ? PhoneNumber.create(raw.phoneNumber.getValue())
