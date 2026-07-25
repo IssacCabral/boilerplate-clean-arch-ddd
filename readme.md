@@ -9,3 +9,15 @@ Gradually, I will describe the concepts used in the projects, as well as the rea
 ## DTO
 
 An application-layer input/output contract
+
+## Clean Arch
+
+### Os Quatro Círculos
+
+**Entities (Entidades):** Regras de negócio da empresa. Existiriam mesmo sem software.
+
+**Use Cases (Casos de Uso):** Regras de negócio da aplicação. Orquestram entidades para realizar tarefas específicas.
+
+**Interface Adapters:** Convertem dados entre o formato dos use cases e o formato de frameworks externos.
+
+**Frameworks & Drivers:** Detalhes técnicos. Banco de dados, web framework, UI.
