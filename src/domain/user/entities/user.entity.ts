@@ -1,6 +1,6 @@
-import { Either, left, right } from "../../@shared/either.shared";
+import { Either, left, right } from "../../../@shared/either.shared";
 import { AbstractEntity } from "../../@shared/abstract.shared";
-import { IError } from "../../@shared/error.shared";
+import { IError } from "../../../@shared/error.shared";
 import { UserProps } from "../interfaces/user.props";
 import { ProfileAlreadyCompleted } from "./user.entity.error";
 import { UserName } from "../value-objects/user-name.vo";

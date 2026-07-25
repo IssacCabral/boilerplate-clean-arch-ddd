@@ -1,4 +1,4 @@
-import { IError } from "../../../domain/@shared/error.shared";
+import { IError } from "../../../@shared/error.shared";
 
 export const UserAlreadyExists: IError = {
   code: "USR-A-001",

@@ -1,4 +1,4 @@
-import { left, right } from "../../../domain/@shared/either.shared";
+import { left, right } from "../../../@shared/either.shared";
 import {
   CreateUserInputDto,
   CreateUserOutputDto,
