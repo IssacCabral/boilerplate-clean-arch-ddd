@@ -6,12 +6,13 @@ import { ProfileAlreadyCompleted } from "./user.entity.error";
 import { UserName } from "../value-objects/user-name.vo";
 import { PhoneNumber } from "../value-objects/phone-number.vo";
 import { DocumentNumber } from "../value-objects/document-number.vo";
+import { UserStatus } from "../enums/user-status.enum";
 
 export type CreateUserEntityProps = Pick<UserProps, "id" | "email"> & {
   avatarUrl?: string;
   name?: UserName;
-  phoneNumber?: PhoneNumber
-  documentNumber?: DocumentNumber
+  phoneNumber?: PhoneNumber;
+  documentNumber?: DocumentNumber;
 };
 
 interface CompleteProfileProps {
@@ -27,6 +28,7 @@ export class UserEntity extends AbstractEntity<UserProps> {
       id: props.id,
       email: props.email,
       isProfileCompleted: false,
+      status: UserStatus.Active,
       createdAt: now,
       updatedAt: now,
     });
@@ -36,18 +38,14 @@ export class UserEntity extends AbstractEntity<UserProps> {
     return new UserEntity(props);
   }
 
-  // changeName(name: string): Either<IError, void> {
-  //   if (name.)
-  // }
-
-  deactivate(): Either<IError, void> {
-    if (this.props.isProfileCompleted) {
-      return left(ProfileAlreadyCompleted);
-    }
-
-    this.props.isProfileCompleted = false;
+  deactivate(): void {
+    this.props.status = UserStatus.Inactive;
     this.touch();
-    return right(undefined);
+  }
+
+  activate(): void {
+    this.props.status = UserStatus.Active;
+    this.touch();
   }
 
   completeProfile(data: CompleteProfileProps): Either<IError, void> {

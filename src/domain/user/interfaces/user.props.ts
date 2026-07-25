@@ -3,6 +3,7 @@ import { Email } from "../value-objects/email.vo";
 import { UserName } from "../value-objects/user-name.vo";
 import { PhoneNumber } from "../value-objects/phone-number.vo";
 import { DocumentNumber } from "../value-objects/document-number.vo";
+import { UserStatus } from "../enums/user-status.enum";
 
 export interface UserProps extends Timestamps {
   id: string;
@@ -10,6 +11,7 @@ export interface UserProps extends Timestamps {
   name?: UserName;
   phoneNumber?: PhoneNumber;
   documentNumber?: DocumentNumber;
+  status: UserStatus;
   avatarUrl?: string;
   isProfileCompleted: boolean;
 }

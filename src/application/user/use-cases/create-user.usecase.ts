@@ -1,16 +1,16 @@
-import { left, right } from "../../domain/shared/either.shared";
+import { left, right } from "../../../domain/@shared/either.shared";
 import {
   CreateUserInputDto,
   CreateUserOutputDto,
-} from "./dtos/create-user.dto";
-import { UseCase } from "../shared/usecase.shared";
-import { UserRepository } from "../../domain/user/repositories/user.repository";
-import { UserAlreadyExists } from "./errors/user-already-exists.error";
-import { UserEntity } from "../../domain/user/entities/user.entity";
-import { Email } from "../../domain/user/value-objects/email.vo";
-import { UserName } from "../../domain/user/value-objects/user-name.vo";
-import { DocumentNumber } from "../../domain/user/value-objects/document-number.vo";
-import { PhoneNumber } from "../../domain/user/value-objects/phone-number.vo";
+} from "../dtos/create-user.dto";
+import { UseCase } from "../../@shared/usecase.shared";
+import { UserRepository } from "../../../domain/user/repositories/user.repository";
+import { UserAlreadyExists } from "../errors/user-already-exists.error";
+import { UserEntity } from "../../../domain/user/entities/user.entity";
+import { Email } from "../../../domain/user/value-objects/email.vo";
+import { UserName } from "../../../domain/user/value-objects/user-name.vo";
+import { DocumentNumber } from "../../../domain/user/value-objects/document-number.vo";
+import { PhoneNumber } from "../../../domain/user/value-objects/phone-number.vo";
 
 export class CreateUserUseCase implements UseCase<
   CreateUserInputDto,
@@ -51,7 +51,11 @@ export class CreateUserUseCase implements UseCase<
       });
     } catch (error) {
       console.log("create-user-usecase error: ", error);
-      return left(error);
+      return left({
+        code: "",
+        message: "",
+        shortMessage: "",
+      });
     }
   }
 }
