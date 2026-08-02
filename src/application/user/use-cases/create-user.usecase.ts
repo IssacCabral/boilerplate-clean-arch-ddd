@@ -12,6 +12,7 @@ import { Email } from "../../../domain/user/value-objects/email.vo";
 import { PasswordHash } from "../../../domain/user/value-objects/password-hash.vo";
 import { Password } from "../../../domain/user/value-objects/password.vo";
 import { PasswordHasher } from "../../ports/password-hasher.port";
+import { UserDtoMapper } from "../mappers/user-dto.mapper";
 
 export class CreateUserUseCase implements UseCase<
   CreateUserInputDto,
@@ -51,12 +52,7 @@ export class CreateUserUseCase implements UseCase<
 
     await this.userRepository.create(user);
 
-    const exportedUser = user.export();
-
-    return right({
-      id: exportedUser.id,
-      email: exportedUser.email.getValue(),
-    });
+    return right(UserDtoMapper.toDto(user));
   }
 
   private buildCreateUserData(input: CreateUserInputDto): Either<

@@ -1,6 +1,6 @@
 import {
-  CompleteProfileDto,
-  CompleteProfileOutput,
+  CompleteProfileInputDto,
+  CompleteProfileOutputDto,
 } from "../dtos/complete-profile.dto";
 import { PhoneNumber } from "../../../domain/user/value-objects/phone-number.vo";
 import { DocumentNumber } from "../../../domain/user/value-objects/document-number.vo";
@@ -10,14 +10,15 @@ import { Either, left, right } from "../../../@shared/either.shared";
 import { UserNotFoundError } from "../errors/user-not-found.error";
 import { UseCase } from "../../@shared/usecase.shared";
 import { IError } from "../../../@shared/error.shared";
+import { UserDtoMapper } from "../mappers/user-dto.mapper";
 
 export class CompleteProfileUseCase implements UseCase<
-  CompleteProfileDto,
-  CompleteProfileOutput
+  CompleteProfileInputDto,
+  CompleteProfileOutputDto
 > {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async exec(dto: CompleteProfileDto): Promise<CompleteProfileOutput> {
+  async exec(dto: CompleteProfileInputDto): Promise<CompleteProfileOutputDto> {
     const profileData = this.buildCompleteProfileData(dto);
     if (profileData.isLeft()) {
       return left(profileData.value);
@@ -35,17 +36,10 @@ export class CompleteProfileUseCase implements UseCase<
 
     await this.userRepository.save(user);
 
-    const exportedUser = user.export();
-
-    return right({
-      id: exportedUser.id,
-      name: exportedUser.name!.getValue(),
-      email: exportedUser.email.getValue(),
-      isProfileCompleted: exportedUser.isProfileCompleted,
-    });
+    return right(UserDtoMapper.toDto(user));
   }
 
-  private buildCompleteProfileData(dto: CompleteProfileDto): Either<
+  private buildCompleteProfileData(dto: CompleteProfileInputDto): Either<
     IError,
     {
       name: UserName;

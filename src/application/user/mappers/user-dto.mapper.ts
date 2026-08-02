@@ -3,16 +3,16 @@ import { UserDto } from "../dtos/user.dto";
 
 export class UserDtoMapper {
   static toDto(user: UserEntity): UserDto {
-    const userData = user.export();
+    const userProps = user.export();
     return {
-      id: userData.id,
-      email: userData.email.getValue(),
-      name: userData.name?.getValue(),
-      phoneNumber: userData.phoneNumber?.getValue(),
-      documentNumber: userData.documentNumber?.getValue(),
-      status: userData.status,
-      avatarUrl: userData.avatarUrl,
-      isProfileCompleted: userData.isProfileCompleted,
+      id: userProps.id,
+      email: userProps.email.getValue(),
+      name: userProps.name?.getValue(),
+      phoneNumber: userProps.phoneNumber?.getValue(),
+      documentNumber: userProps.documentNumber?.getValue(),
+      status: userProps.status,
+      avatarUrl: userProps.avatarUrl,
+      isProfileCompleted: userProps.isProfileCompleted,
     };
   }
 
