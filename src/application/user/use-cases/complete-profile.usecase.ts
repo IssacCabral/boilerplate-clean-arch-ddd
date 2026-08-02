@@ -24,11 +24,14 @@ export class CompleteProfileUseCase {
         return left(UserNotFoundError);
       }
 
-      user.completeProfile({
+      const result = user.completeProfile({
         documentNumber: document,
         phoneNumber: phone,
         name,
       });
+      if (result.isLeft()) {
+        return left(result.value);
+      }
 
       await this.userRepository.save(user);
 
