@@ -2,27 +2,10 @@ import { Either, left, right } from "../../../@shared/either.shared";
 import { AbstractEntity } from "../../@shared/abstract.shared";
 import { IError } from "../../../@shared/error.shared";
 import { UserProps } from "../interfaces/user.props";
-import { UserName } from "../value-objects/user-name.vo";
-import { PhoneNumber } from "../value-objects/phone-number.vo";
-import { DocumentNumber } from "../value-objects/document-number.vo";
 import { UserStatus } from "../enums/user-status.enum";
 import { ProfileAlreadyCompletedError } from "../errors/profile-already-completed.error";
-
-export type CreateUserEntityProps = Pick<
-  UserProps,
-  "id" | "email" | "passwordHash"
-> & {
-  avatarUrl?: string;
-  name?: UserName;
-  phoneNumber?: PhoneNumber;
-  documentNumber?: DocumentNumber;
-};
-
-interface CompleteProfileProps {
-  name: UserName;
-  phoneNumber: PhoneNumber;
-  documentNumber: DocumentNumber;
-}
+import { CompleteProfileProps } from "../interfaces/complete-profile.props";
+import { CreateUserEntityProps } from "../interfaces/create-user-entity.props";
 
 export class UserEntity extends AbstractEntity<UserProps> {
   static create(props: CreateUserEntityProps): UserEntity {
