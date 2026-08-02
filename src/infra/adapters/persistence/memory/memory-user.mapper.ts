@@ -24,14 +24,14 @@ export class MemoryUserMapper {
   static toEntity(raw: MemoryUserRecord): UserEntity {
     return UserEntity.hydrate({
       id: raw.id,
-      email: Email.create(raw.email),
-      passwordHash: PasswordHash.create(raw.passwordHash),
-      name: raw.name ? UserName.create(raw.name) : undefined,
+      email: Email.restore(raw.email),
+      passwordHash: PasswordHash.restore(raw.passwordHash),
+      name: raw.name ? UserName.restore(raw.name) : undefined,
       phoneNumber: raw.phoneNumber
-        ? PhoneNumber.create(raw.phoneNumber)
+        ? PhoneNumber.restore(raw.phoneNumber)
         : undefined,
       documentNumber: raw.documentNumber
-        ? DocumentNumber.create(raw.documentNumber)
+        ? DocumentNumber.restore(raw.documentNumber)
         : undefined,
       status: raw.status,
       avatarUrl: raw.avatarUrl ?? undefined,

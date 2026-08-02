@@ -1,13 +1,22 @@
 import { AbstractValueObject } from "../../@shared/abstract.vo.shared";
+import { Either, left, right } from "../../../@shared/either.shared";
+import { IError } from "../../../@shared/error.shared";
+import { InvalidEmailError } from "../errors/invalid-email.error";
 
 export class Email extends AbstractValueObject<string> {
-  static create(email: string): Email {
+  static create(email: string): Either<IError, Email> {
     if (!email.includes("@")) {
-      // todo: mudar para either?
-      // todo: criar um erro customizado para email inválido?
-      throw new Error("Invalid email");
+      return left(InvalidEmailError);
     }
-    return new Email(email);
+    return right(new Email(email));
+  }
+
+  static restore(email: string): Email {
+    const result = Email.create(email);
+    if (result.isLeft()) {
+      throw new Error(result.value.message);
+    }
+    return result.value;
   }
 
   static isValid(email: string): boolean {

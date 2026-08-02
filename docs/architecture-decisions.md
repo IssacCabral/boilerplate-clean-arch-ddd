@@ -113,6 +113,33 @@ export const CompleteProfileFailedError: IError = {
 
 Tradeoff: usamos códigos semânticos em vez de números sequenciais. Isso evita a necessidade de procurar o último código criado e torna os erros mais legíveis.
 
+## Tratamento de Erros nos Use Cases
+
+Use cases devem retornar erros esperados usando `Either`.
+
+Exemplos de erros esperados:
+
+```txt
+USER_ALREADY_EXISTS
+USER_NOT_FOUND
+USER_INVALID_EMAIL
+USER_PROFILE_ALREADY_COMPLETED
+```
+
+Erros inesperados, como falha de banco, bug em mapper, falha de adapter ou inconsistência técnica, não devem ser tratados como erro normal de negócio dentro do use case.
+
+Por padrão, use cases não devem envolver todo o fluxo em `try/catch` genérico.
+
+Tradeoff: isso mantém o use case focado em regras de aplicação e evita mascarar bugs como erros genéricos. Falhas inesperadas devem ser tratadas na borda da aplicação ou por um decorator por composição.
+
+Exemplo futuro:
+
+```txt
+Controller
+  -> SafeUseCaseDecorator
+    -> CreateUserUseCase
+```
+
 ## Código Compartilhado
 
 Código compartilhado deve permanecer pequeno e intencional.
@@ -211,6 +238,27 @@ UserStatus
 
 Tradeoff: evite transformar todo primitivo em value object. Prefira value objects quando eles protegem regras ou tornam a linguagem do domínio mais clara.
 
+## Criação e Restauração de Value Objects
+
+Value objects devem ter dois caminhos principais:
+
+```txt
+create()
+  usado para entrada externa
+  retorna Either<IError, ValueObject>
+
+restore()
+  usado por mappers e persistência
+  retorna ValueObject
+  lança erro técnico se o dado persistido estiver inválido
+```
+
+`create()` representa validação de dados vindos de fora da aplicação, como DTOs de entrada.
+
+`restore()` representa reconstrução de dados que já foram persistidos. Se um dado persistido não consegue restaurar um value object válido, isso indica falha técnica ou corrupção de dados, não erro esperado de negócio.
+
+Tradeoff: os use cases ficam mais explícitos ao tratar erros esperados, enquanto os mappers continuam simples e não empurram erros técnicos para a camada de aplicação.
+
 ## Value Objects Compartilhados
 
 Um value object pode ser compartilhado somente quando representa o mesmo conceito entre módulos de domínio.
@@ -233,6 +281,35 @@ CompanyName
 ```
 
 Tradeoff: se outro módulo importa um value object de `domain/user`, isso pode indicar que o value object deve ir para um local compartilhado do domínio, ou que o outro módulo precisa de seu próprio value object específico.
+
+## Mappers de Persistência
+
+Mappers de persistência convertem entre dados crus do adapter e entidades de domínio.
+
+Exemplo:
+
+```txt
+MemoryUserRecord <-> UserEntity
+PrismaUser       <-> UserEntity
+```
+
+Cada adapter deve ter sua própria tipagem de persistência.
+
+Exemplos:
+
+```txt
+MemoryUserRecord
+PrismaUser
+MongoUserDocument
+```
+
+Esses tipos não devem vazar para domínio ou aplicação.
+
+`toEntity()` deve reconstruir a entidade usando `hydrate()` na entidade e `restore()` nos value objects.
+
+`toPersistence()` deve converter a entidade para o formato esperado pelo adapter, usando valores primitivos quando apropriado.
+
+Tradeoff: isso mantém a entidade protegida por value objects e evita acoplamento entre o domínio e formatos específicos de banco, ORM, memória ou cache.
 
 
 

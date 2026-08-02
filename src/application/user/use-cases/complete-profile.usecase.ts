@@ -8,44 +8,53 @@ import { UserRepository } from "../../../domain/user/repositories/user.repositor
 import { UserName } from "../../../domain/user/value-objects/user-name.vo";
 import { left, right } from "../../../@shared/either.shared";
 import { UserNotFoundError } from "../errors/user-not-found.error";
-import { CompleteProfileFailedError } from "../errors/complete-profile-failed.error";
+import { UseCase } from "../../@shared/usecase.shared";
 
-export class CompleteProfileUseCase {
+export class CompleteProfileUseCase implements UseCase<
+  CompleteProfileDto,
+  CompleteProfileOutput
+> {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async execute(dto: CompleteProfileDto): Promise<CompleteProfileOutput> {
-    try {
-      const name = UserName.create(dto.name);
-      const phone = PhoneNumber.create(dto.phone);
-      const document = DocumentNumber.create(dto.document);
-
-      const user = await this.userRepository.findById(dto.id);
-      if (!user) {
-        return left(UserNotFoundError);
-      }
-
-      const result = user.completeProfile({
-        documentNumber: document,
-        phoneNumber: phone,
-        name,
-      });
-      if (result.isLeft()) {
-        return left(result.value);
-      }
-
-      await this.userRepository.save(user);
-
-      const exportedUser = user.export();
-
-      return right({
-        id: exportedUser.id,
-        name: exportedUser.name!.getValue(),
-        email: exportedUser.email.getValue(),
-        isProfileCompleted: exportedUser.isProfileCompleted,
-      });
-    } catch (error: unknown) {
-      console.log("complete-profile-usecase error: ", error);
-      return left(CompleteProfileFailedError);
+  async exec(dto: CompleteProfileDto): Promise<CompleteProfileOutput> {
+    const name = UserName.create(dto.name);
+    if (name.isLeft()) {
+      return left(name.value);
     }
+
+    const phone = PhoneNumber.create(dto.phone);
+    if (phone.isLeft()) {
+      return left(phone.value);
+    }
+
+    const document = DocumentNumber.create(dto.document);
+    if (document.isLeft()) {
+      return left(document.value);
+    }
+
+    const user = await this.userRepository.findById(dto.id);
+    if (!user) {
+      return left(UserNotFoundError);
+    }
+
+    const result = user.completeProfile({
+      documentNumber: document.value,
+      phoneNumber: phone.value,
+      name: name.value,
+    });
+    if (result.isLeft()) {
+      return left(result.value);
+    }
+
+    await this.userRepository.save(user);
+
+    const exportedUser = user.export();
+
+    return right({
+      id: exportedUser.id,
+      name: exportedUser.name!.getValue(),
+      email: exportedUser.email.getValue(),
+      isProfileCompleted: exportedUser.isProfileCompleted,
+    });
   }
 }
