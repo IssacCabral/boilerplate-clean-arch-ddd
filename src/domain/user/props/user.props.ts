@@ -5,6 +5,7 @@ import { PhoneNumber } from "../value-objects/phone-number.vo";
 import { DocumentNumber } from "../value-objects/document-number.vo";
 import { UserStatus } from "../enums/user-status.enum";
 import { PasswordHash } from "../value-objects/password-hash.vo";
+import { RoleProps } from "../../access-control/role/props/role.props";
 
 export interface UserProps extends Timestamps {
   id: string;
@@ -16,4 +17,5 @@ export interface UserProps extends Timestamps {
   status: UserStatus;
   avatarUrl?: string;
   isProfileCompleted: boolean;
+  role?: RoleProps;
 }
