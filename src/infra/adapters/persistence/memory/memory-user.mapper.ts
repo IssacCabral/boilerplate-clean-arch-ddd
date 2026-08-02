@@ -1,11 +1,12 @@
+import { RoleEntity } from "../../../../domain/access-control/role/entities/role.entity";
 import { UserEntity } from "../../../../domain/user/entities/user.entity";
 import { UserStatus } from "../../../../domain/user/enums/user-status.enum";
-import { RoleProps } from "../../../../domain/access-control/role/props/role.props";
 import { DocumentNumber } from "../../../../domain/user/value-objects/document-number.vo";
 import { Email } from "../../../../domain/user/value-objects/email.vo";
 import { PasswordHash } from "../../../../domain/user/value-objects/password-hash.vo";
 import { PhoneNumber } from "../../../../domain/user/value-objects/phone-number.vo";
 import { UserName } from "../../../../domain/user/value-objects/user-name.vo";
+import { MemoryRoleMapper, MemoryRoleRecord } from "./memory-role.mapper";
 
 export type MemoryUserRecord = {
   id: string;
@@ -14,7 +15,7 @@ export type MemoryUserRecord = {
   name?: string;
   phoneNumber?: string;
   documentNumber?: string;
-  role?: RoleProps;
+  role?: MemoryRoleRecord;
   status: UserStatus;
   avatarUrl?: string;
   isProfileCompleted: boolean;
@@ -24,6 +25,12 @@ export type MemoryUserRecord = {
 
 export class MemoryUserMapper {
   static toEntity(raw: MemoryUserRecord): UserEntity {
+    let role: MemoryRoleRecord | undefined;
+
+    if (raw.role) {
+      role = MemoryRoleMapper.toEntity(raw.role).export();
+    }
+
     return UserEntity.hydrate({
       id: raw.id,
       email: Email.restore(raw.email),
@@ -35,7 +42,7 @@ export class MemoryUserMapper {
       documentNumber: raw.documentNumber
         ? DocumentNumber.restore(raw.documentNumber)
         : undefined,
-      role: raw.role,
+      role,
       status: raw.status,
       avatarUrl: raw.avatarUrl ?? undefined,
       isProfileCompleted: raw.isProfileCompleted,
@@ -47,20 +54,22 @@ export class MemoryUserMapper {
   // pode ser usado em create, save... mas também poderiamos criar um método para cada caso específico
   // ex: toCreate, toSave, toUpdate, etc.
   static toPersistence(user: UserEntity): MemoryUserRecord {
-    const exportedUser = user.export();
+    const userProps = user.export();
     return {
-      id: exportedUser.id,
-      email: exportedUser.email.getValue(),
-      name: exportedUser.name?.getValue(),
-      phoneNumber: exportedUser.phoneNumber?.getValue(),
-      documentNumber: exportedUser.documentNumber?.getValue(),
-      role: exportedUser.role,
-      avatarUrl: exportedUser.avatarUrl,
-      isProfileCompleted: exportedUser.isProfileCompleted,
-      passwordHash: exportedUser.passwordHash.getValue(),
-      status: exportedUser.status,
-      createdAt: exportedUser.createdAt,
-      updatedAt: exportedUser.updatedAt,
+      id: userProps.id,
+      email: userProps.email.getValue(),
+      name: userProps.name?.getValue(),
+      phoneNumber: userProps.phoneNumber?.getValue(),
+      documentNumber: userProps.documentNumber?.getValue(),
+      role: userProps.role
+        ? MemoryRoleMapper.toPersistence(RoleEntity.hydrate(userProps.role))
+        : undefined,
+      avatarUrl: userProps.avatarUrl,
+      isProfileCompleted: userProps.isProfileCompleted,
+      passwordHash: userProps.passwordHash.getValue(),
+      status: userProps.status,
+      createdAt: userProps.createdAt,
+      updatedAt: userProps.updatedAt,
     };
   }
 }
