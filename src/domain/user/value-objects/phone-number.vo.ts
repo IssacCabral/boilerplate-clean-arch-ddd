@@ -18,4 +18,12 @@ export class PhoneNumber extends AbstractValueObject<string> {
     }
     return result.value;
   }
+
+  countryCode(): string {
+    return this.getValue().split(" ")[0];
+  }
+
+  number(): string {
+    return this.getValue().split(" ")[1];
+  }
 }
