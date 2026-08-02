@@ -1,6 +1,6 @@
 import { IError } from "../../../@shared/error.shared";
 
 export const UserNotFoundError: IError = {
-  code: "USR-A-002",
+  code: "USER_NOT_FOUND",
   message: "User not found.",
 };

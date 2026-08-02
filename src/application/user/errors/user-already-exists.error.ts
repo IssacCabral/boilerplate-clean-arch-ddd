@@ -1,6 +1,6 @@
 import { IError } from "../../../@shared/error.shared";
 
 export const UserAlreadyExists: IError = {
-  code: "USR-A-001",
+  code: "USER_ALREADY_EXISTS",
   message: "User already exists.",
 };

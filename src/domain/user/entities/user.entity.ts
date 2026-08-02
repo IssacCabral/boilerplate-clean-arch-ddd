@@ -2,11 +2,11 @@ import { Either, left, right } from "../../../@shared/either.shared";
 import { AbstractEntity } from "../../@shared/abstract.shared";
 import { IError } from "../../../@shared/error.shared";
 import { UserProps } from "../interfaces/user.props";
-import { ProfileAlreadyCompleted } from "./user.entity.error";
 import { UserName } from "../value-objects/user-name.vo";
 import { PhoneNumber } from "../value-objects/phone-number.vo";
 import { DocumentNumber } from "../value-objects/document-number.vo";
 import { UserStatus } from "../enums/user-status.enum";
+import { ProfileAlreadyCompletedError } from "../errors/profile-already-completed.error";
 
 export type CreateUserEntityProps = Pick<
   UserProps,
@@ -54,7 +54,7 @@ export class UserEntity extends AbstractEntity<UserProps> {
 
   completeProfile(data: CompleteProfileProps): Either<IError, void> {
     if (this.props.isProfileCompleted) {
-      return left(ProfileAlreadyCompleted);
+      return left(ProfileAlreadyCompletedError);
     }
 
     this.props.name = data.name;
