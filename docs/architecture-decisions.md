@@ -60,6 +60,59 @@ Casos de uso orquestram objetos de domínio e ports. Eles não devem conter deta
 
 Tradeoff: a aplicação também é agrupada por módulo de domínio. Isso mantém os comportamentos de aplicação relacionados a usuário próximos, sem misturar regras de aplicação dentro da camada de domínio.
 
+## Erros
+
+Erros devem ficar próximos da camada e do módulo que são donos da regra violada.
+
+Erros de aplicação representam falhas esperadas de casos de uso, como usuário não encontrado, usuário já existente ou falha ao completar um fluxo.
+
+Exemplo:
+
+```txt
+src/
+  application/
+    user/
+      errors/
+        user-not-found.error.ts
+        user-already-exists.error.ts
+        complete-profile-failed.error.ts
+```
+
+Erros de domínio representam violações de regras e invariantes do domínio, como tentar completar um perfil que já foi completado.
+
+Exemplo:
+
+```txt
+src/
+  domain/
+    user/
+      errors/
+        profile-already-completed.error.ts
+```
+
+Convenção:
+
+```txt
+Arquivo: complete-profile-failed.error.ts
+Const:   CompleteProfileFailedError
+Code:    USER_COMPLETE_PROFILE_FAILED
+```
+
+O nome do arquivo e da constante não precisam repetir o domínio quando a pasta já fornece esse contexto, como em `application/user/errors` ou `domain/user/errors`.
+
+O `code` deve incluir o domínio porque é um identificador global, usado em API, logs, frontend e documentação.
+
+Exemplo:
+
+```ts
+export const CompleteProfileFailedError: IError = {
+  code: "USER_COMPLETE_PROFILE_FAILED",
+  message: "Failed to complete profile.",
+};
+```
+
+Tradeoff: usamos códigos semânticos em vez de números sequenciais. Isso evita a necessidade de procurar o último código criado e torna os erros mais legíveis.
+
 ## Código Compartilhado
 
 Código compartilhado deve permanecer pequeno e intencional.
