@@ -1,8 +1,9 @@
-import { left, right } from "../../../@shared/either.shared";
+import { Either, left, right } from "../../../@shared/either.shared";
 import {
   CreateUserInputDto,
   CreateUserOutputDto,
 } from "../dtos/create-user.dto";
+import { IError } from "../../../@shared/error.shared";
 import { UseCase } from "../../@shared/usecase.shared";
 import { UserRepository } from "../../../domain/user/repositories/user.repository";
 import { UserAlreadyExists } from "../errors/user-already-exists.error";
@@ -22,24 +23,21 @@ export class CreateUserUseCase implements UseCase<
   ) {}
 
   async exec(input: CreateUserInputDto): Promise<CreateUserOutputDto> {
-    const email = Email.create(input.email);
-    if (email.isLeft()) {
-      return left(email.value);
-    }
-
-    const password = Password.create(input.password);
-    if (password.isLeft()) {
-      return left(password.value);
+    const userData = this.buildCreateUserData(input);
+    if (userData.isLeft()) {
+      return left(userData.value);
     }
 
     const existingUser = await this.userRepository.findByEmail(
-      email.value.getValue(),
+      userData.value.email.getValue(),
     );
     if (existingUser) {
       return left(UserAlreadyExists);
     }
 
-    const hashedPassword = this.passwordHasher.hash(password.value.getValue());
+    const hashedPassword = this.passwordHasher.hash(
+      userData.value.password.getValue(),
+    );
     const passwordHash = PasswordHash.create(hashedPassword);
     if (passwordHash.isLeft()) {
       return left(passwordHash.value);
@@ -47,7 +45,7 @@ export class CreateUserUseCase implements UseCase<
 
     const user = UserEntity.create({
       id: Math.random().toString(36).substring(2, 15).toString(),
-      email: email.value,
+      email: userData.value.email,
       passwordHash: passwordHash.value,
     });
 
@@ -58,6 +56,29 @@ export class CreateUserUseCase implements UseCase<
     return right({
       id: exportedUser.id,
       email: exportedUser.email.getValue(),
+    });
+  }
+
+  private buildCreateUserData(input: CreateUserInputDto): Either<
+    IError,
+    {
+      email: Email;
+      password: Password;
+    }
+  > {
+    const email = Email.create(input.email);
+    if (email.isLeft()) {
+      return left(email.value);
+    }
+
+    const password = Password.create(input.password);
+    if (password.isLeft()) {
+      return left(password.value);
+    }
+
+    return right({
+      email: email.value,
+      password: password.value,
     });
   }
 }
