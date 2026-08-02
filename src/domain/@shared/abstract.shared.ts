@@ -14,29 +14,6 @@ export abstract class AbstractEntity<T extends Timestamps> {
     return { ...this.props };
   }
 
-  /**
-   * Returns a "safe" version of the entity, removing sensitive fields.
-   * Each subclass must override `getSensitiveFields()` if it wants to use this.
-   */
-  public exportSafe(): Partial<T> {
-    const sensitiveFields = this.getSensitiveFields();
-    const clone = { ...this.props };
-
-    for (const field of sensitiveFields) {
-      delete clone[field];
-    }
-
-    return clone as Partial<T>;
-  }
-
-  /**
-   * Must be overridden by entities that have sensitive data.
-   * Ex: return ['password', 'twoFactorSecret']
-   */
-  protected getSensitiveFields(): Array<keyof T> {
-    return [];
-  }
-
   protected touch(): void {
     this.props.updatedAt = new Date();
   }
