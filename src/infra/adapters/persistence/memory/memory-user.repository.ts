@@ -1,5 +1,6 @@
 import { UserEntity } from "../../../../domain/user/entities/user.entity";
 import { UserRepository } from "../../../../domain/user/repositories/user.repository";
+import { Email } from "../../../../domain/user/value-objects/email.vo";
 import { MemoryUserMapper, MemoryUserRecord } from "./memory-user.mapper";
 
 export class MemoryUserRepository implements UserRepository {
@@ -18,8 +19,8 @@ export class MemoryUserRepository implements UserRepository {
       : Promise.resolve(null);
   }
 
-  findByEmail(email: string): Promise<UserEntity | null> {
-    const record = this.users.find((user) => user.email === email);
+  findByEmail(email: Email): Promise<UserEntity | null> {
+    const record = this.users.find((user) => user.email === email.getValue());
     return record
       ? Promise.resolve(MemoryUserMapper.toEntity(record))
       : Promise.resolve(null);

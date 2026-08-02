@@ -1,3 +1,4 @@
+import { RoleProps } from "../../access-control/role/props/role.props";
 import { DocumentNumber } from "../value-objects/document-number.vo";
 import { PhoneNumber } from "../value-objects/phone-number.vo";
 import { UserName } from "../value-objects/user-name.vo";
@@ -11,4 +12,5 @@ export type CreateUserEntityProps = Pick<
   name?: UserName;
   phoneNumber?: PhoneNumber;
   documentNumber?: DocumentNumber;
+  role: RoleProps;
 };

@@ -1,5 +1,7 @@
+import { RoleDtoMapper } from "../../access-control/role/mappers/role-dto.mapper";
 import { UserEntity } from "../../../domain/user/entities/user.entity";
-import { UserDto } from "../dtos/user.dto";
+import { UserDto, UserWithRoleDto } from "../dtos/user.dto";
+import { RoleEntity } from "../../../domain/access-control/role/entities/role.entity";
 
 export class UserDtoMapper {
   static toDto(user: UserEntity): UserDto {
@@ -13,8 +15,16 @@ export class UserDtoMapper {
       status: userProps.status,
       avatarUrl: userProps.avatarUrl,
       isProfileCompleted: userProps.isProfileCompleted,
+      createdAt: userProps.createdAt,
+      updatedAt: userProps.updatedAt,
     };
   }
 
-  // TODO: outros mappers com relacionamentos, de acordo com o dto
+  static toWithRoleDto(user: UserEntity, role: RoleEntity): UserWithRoleDto {
+    const userDto = this.toDto(user);
+    return {
+      ...userDto,
+      role: RoleDtoMapper.toDto(role),
+    };
+  }
 }

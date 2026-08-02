@@ -1,4 +1,5 @@
 import { UserStatus } from "../../../domain/user/enums/user-status.enum";
+import { RoleDto } from "../../access-control/role/dtos/role.dto";
 
 export interface UserDto {
   id: string;
@@ -9,19 +10,10 @@ export interface UserDto {
   status: UserStatus;
   avatarUrl?: string;
   isProfileCompleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-// adicionar relações aqui
-
-// export interface UserWithRoleDto extends UserDto {
-//   role: RoleDto;
-// }
-
-// export interface UserWithBooksDto extends UserDto {
-//   books: BookDto[];
-// }
-
-// export interface UserDetailsDto extends UserDto {
-//   role: RoleDto;
-//   books: BookDto[];
-// }
+export interface UserWithRoleDto extends UserDto {
+  role: RoleDto;
+}

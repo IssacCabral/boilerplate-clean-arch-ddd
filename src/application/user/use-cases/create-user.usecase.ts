@@ -13,6 +13,8 @@ import { PasswordHash } from "../../../domain/user/value-objects/password-hash.v
 import { Password } from "../../../domain/user/value-objects/password.vo";
 import { PasswordHasher } from "../../ports/password-hasher.port";
 import { UserDtoMapper } from "../mappers/user-dto.mapper";
+import { RoleRepository } from "../../../domain/access-control/role/repositories/role.repository";
+import { RoleNotFoundError } from "../../access-control/role/errors/role-not-found.error";
 
 export class CreateUserUseCase implements UseCase<
   CreateUserInputDto,
@@ -21,6 +23,7 @@ export class CreateUserUseCase implements UseCase<
   constructor(
     private readonly userRepository: UserRepository,
     private readonly passwordHasher: PasswordHasher,
+    private readonly roleRepository: RoleRepository,
   ) {}
 
   async exec(input: CreateUserInputDto): Promise<CreateUserOutputDto> {
@@ -29,8 +32,13 @@ export class CreateUserUseCase implements UseCase<
       return left(userData.value);
     }
 
+    const role = await this.roleRepository.findById(input.roleId);
+    if (!role) {
+      return left(RoleNotFoundError);
+    }
+
     const existingUser = await this.userRepository.findByEmail(
-      userData.value.email.getValue(),
+      userData.value.email,
     );
     if (existingUser) {
       return left(UserAlreadyExists);
@@ -48,11 +56,12 @@ export class CreateUserUseCase implements UseCase<
       id: Math.random().toString(36).substring(2, 15).toString(),
       email: userData.value.email,
       passwordHash: passwordHash.value,
+      role: role.export(),
     });
 
     await this.userRepository.create(user);
 
-    return right(UserDtoMapper.toDto(user));
+    return right(UserDtoMapper.toWithRoleDto(user, role));
   }
 
   private buildCreateUserData(input: CreateUserInputDto): Either<

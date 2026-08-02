@@ -213,6 +213,28 @@ são ports para outras capacidades externas.
 
 Tradeoff: interfaces de repository ficam próximas do módulo de domínio porque expressam como agregados são recuperados e persistidos pela perspectiva do domínio/aplicação. Repositories concretos ficam nos adapters de infraestrutura.
 
+Quando um método de repository recebe um valor que já é representado por um value object, preferimos receber o value object em vez de um primitivo.
+
+Exemplo:
+
+```ts
+findByEmail(email: Email): Promise<UserEntity | null>
+```
+
+Motivo: `findByEmail` não aceita qualquer string. Ele espera um email válido, com significado e regra de domínio.
+
+Se a assinatura recebe `string`, qualquer chamada poderia passar valores inválidos:
+
+```ts
+findByEmail("abc");
+findByEmail("");
+findByEmail("qualquer coisa");
+```
+
+Ao receber `Email`, o contrato comunica que só buscamos usuário por um email válido.
+
+Tradeoff: adapters de infraestrutura precisam converter o value object para primitivo, como `email.getValue()`, antes de consultar memória, banco, ORM ou API externa.
+
 ## Value Objects
 
 Use value objects quando um valor tiver significado de domínio, validação ou comportamento.

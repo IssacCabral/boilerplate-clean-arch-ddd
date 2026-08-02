@@ -16,6 +16,7 @@ export class UserEntity extends AbstractEntity<UserProps> {
       passwordHash: props.passwordHash,
       isProfileCompleted: false,
       status: UserStatus.Active,
+      role: props.role,
       createdAt: now,
       updatedAt: now,
     });

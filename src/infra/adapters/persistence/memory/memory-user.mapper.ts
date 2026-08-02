@@ -1,5 +1,6 @@
 import { UserEntity } from "../../../../domain/user/entities/user.entity";
 import { UserStatus } from "../../../../domain/user/enums/user-status.enum";
+import { RoleProps } from "../../../../domain/access-control/role/props/role.props";
 import { DocumentNumber } from "../../../../domain/user/value-objects/document-number.vo";
 import { Email } from "../../../../domain/user/value-objects/email.vo";
 import { PasswordHash } from "../../../../domain/user/value-objects/password-hash.vo";
@@ -13,6 +14,7 @@ export type MemoryUserRecord = {
   name?: string;
   phoneNumber?: string;
   documentNumber?: string;
+  role?: RoleProps;
   status: UserStatus;
   avatarUrl?: string;
   isProfileCompleted: boolean;
@@ -33,6 +35,7 @@ export class MemoryUserMapper {
       documentNumber: raw.documentNumber
         ? DocumentNumber.restore(raw.documentNumber)
         : undefined,
+      role: raw.role,
       status: raw.status,
       avatarUrl: raw.avatarUrl ?? undefined,
       isProfileCompleted: raw.isProfileCompleted,
@@ -51,6 +54,7 @@ export class MemoryUserMapper {
       name: exportedUser.name?.getValue(),
       phoneNumber: exportedUser.phoneNumber?.getValue(),
       documentNumber: exportedUser.documentNumber?.getValue(),
+      role: exportedUser.role,
       avatarUrl: exportedUser.avatarUrl,
       isProfileCompleted: exportedUser.isProfileCompleted,
       passwordHash: exportedUser.passwordHash.getValue(),
