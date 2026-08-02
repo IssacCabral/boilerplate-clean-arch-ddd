@@ -1,3 +1,6 @@
+import { Either } from "../../../@shared/either.shared";
+import { IError } from "../../../@shared/error.shared";
+
 export interface CompleteProfileDto {
   id: string;
   email: string;
@@ -6,9 +9,12 @@ export interface CompleteProfileDto {
   name: string;
 }
 
-export interface CompleteProfileOutput {
-  id: string;
-  name: string;
-  email: string;
-  isProfileCompleted: boolean;
-}
+export type CompleteProfileOutput = Either<
+  IError,
+  {
+    id: string;
+    name: string;
+    email: string;
+    isProfileCompleted: boolean;
+  }
+>;

@@ -11,6 +11,7 @@ import { Email } from "../../../domain/user/value-objects/email.vo";
 import { PasswordHash } from "../../../domain/user/value-objects/password-hash.vo";
 import { Password } from "../../../domain/user/value-objects/password.vo";
 import { PasswordHasher } from "../../ports/password-hasher.port";
+import { CreateUserFailedError } from "../errors/create-user-failed.error";
 
 export class CreateUserUseCase implements UseCase<
   CreateUserInputDto,
@@ -48,11 +49,7 @@ export class CreateUserUseCase implements UseCase<
       });
     } catch (error) {
       console.log("create-user-usecase error: ", error);
-      return left({
-        code: "",
-        message: "",
-        shortMessage: "",
-      });
+      return left(CreateUserFailedError);
     }
   }
 }
