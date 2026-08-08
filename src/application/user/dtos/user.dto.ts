@@ -1,3 +1,4 @@
+import { PaginationData } from "../../../@shared/pagination.shared";
 import { RoleEntity } from "../../../domain/access-control/role/entities/role.entity";
 import { UserEntity } from "../../../domain/user/entities/user.entity";
 import { UserStatus } from "../../../domain/user/enums/user-status.enum";
@@ -21,6 +22,15 @@ export interface UserDto {
 }
 
 export class UserDtoMapper {
+  static toPaginationDto(
+    users: PaginationData<UserEntity>,
+  ): PaginationData<UserDto> {
+    return {
+      meta: users.meta,
+      data: users.data.map(UserDtoMapper.toDto),
+    };
+  }
+
   static toDto(user: UserEntity): UserDto {
     const userProps = user.export();
     let role: RoleDto | undefined;
