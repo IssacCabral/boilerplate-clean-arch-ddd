@@ -1,4 +1,5 @@
 import { RoleEntity } from "../../../../domain/access-control/role/entities/role.entity";
+import { RoleProps } from "../../../../domain/access-control/role/props/role.props";
 import { UserEntity } from "../../../../domain/user/entities/user.entity";
 import { UserStatus } from "../../../../domain/user/enums/user-status.enum";
 import { DocumentNumber } from "../../../../domain/user/value-objects/document-number.vo";
@@ -24,11 +25,11 @@ export type MemoryUserRecord = {
 };
 
 export class MemoryUserMapper {
-  static toEntity(raw: MemoryUserRecord): UserEntity {
-    let role: MemoryRoleRecord | undefined;
+  static toDomain(raw: MemoryUserRecord): UserEntity {
+    let role: RoleProps | undefined;
 
     if (raw.role) {
-      role = MemoryRoleMapper.toEntity(raw.role).export();
+      role = MemoryRoleMapper.toDomain(raw.role).export();
     }
 
     return UserEntity.hydrate({
@@ -44,15 +45,13 @@ export class MemoryUserMapper {
         : undefined,
       role,
       status: raw.status,
-      avatarUrl: raw.avatarUrl ?? undefined,
+      avatarUrl: raw.avatarUrl,
       isProfileCompleted: raw.isProfileCompleted,
       createdAt: raw.createdAt,
       updatedAt: raw.updatedAt,
     });
   }
 
-  // pode ser usado em create, save... mas também poderiamos criar um método para cada caso específico
-  // ex: toCreate, toSave, toUpdate, etc.
   static toPersistence(user: UserEntity): MemoryUserRecord {
     const userProps = user.export();
     return {

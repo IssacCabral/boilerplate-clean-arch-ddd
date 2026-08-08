@@ -1,4 +1,5 @@
 import { PermissionEntity } from "../../../../domain/access-control/permission/entities/permission.entity";
+import { PermissionProps } from "../../../../domain/access-control/permission/props/permission.props";
 import { RoleEntity } from "../../../../domain/access-control/role/entities/role.entity";
 import { RoleIdentifier } from "../../../../domain/access-control/role/enums/role-identifier.enum";
 import {
@@ -16,12 +17,12 @@ export type MemoryRoleRecord = {
 };
 
 export class MemoryRoleMapper {
-  static toEntity(raw: MemoryRoleRecord): RoleEntity {
-    let permissions: MemoryPermissionRecord[] | undefined;
+  static toDomain(raw: MemoryRoleRecord): RoleEntity {
+    let permissions: PermissionProps[] | undefined;
 
     if (raw.permissions) {
       permissions = raw.permissions.map((permission) =>
-        MemoryPermissionMapper.toEntity(permission).export(),
+        MemoryPermissionMapper.toDomain(permission).export(),
       );
     }
 

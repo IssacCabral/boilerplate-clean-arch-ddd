@@ -10,7 +10,7 @@ export type MemoryPermissionRecord = {
 };
 
 export class MemoryPermissionMapper {
-  static toEntity(raw: MemoryPermissionRecord): PermissionEntity {
+  static toDomain(raw: MemoryPermissionRecord): PermissionEntity {
     return PermissionEntity.hydrate({
       id: raw.id,
       identifier: raw.identifier,
