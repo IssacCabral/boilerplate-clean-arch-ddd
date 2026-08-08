@@ -1,6 +1,6 @@
 import { Either } from "../../../@shared/either.shared";
 import { IError } from "../../../@shared/error.shared";
-import { UserWithRoleDto } from "./user.dto";
+import { UserDto } from "./user.dto";
 
 export interface CreateUserInputDto {
   email: string;
@@ -8,4 +8,4 @@ export interface CreateUserInputDto {
   roleId: string;
 }
 
-export type CreateUserOutputDto = Either<IError, UserWithRoleDto>;
+export type CreateUserOutputDto = Either<IError, UserDto>;

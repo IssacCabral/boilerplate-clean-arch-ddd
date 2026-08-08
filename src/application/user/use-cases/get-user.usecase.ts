@@ -2,8 +2,8 @@ import { left, right } from "../../../@shared/either.shared";
 import { UserRepository } from "../../../domain/user/repositories/user.repository";
 import { UseCase } from "../../@shared/usecase.shared";
 import { GetUserInputDto, GetUserOutputDto } from "../dtos/get-user.dto";
+import { UserDtoMapper } from "../dtos/user.dto";
 import { UserNotFoundError } from "../errors/user-not-found.error";
-import { UserDtoMapper } from "../mappers/user-dto.mapper";
 
 export class GetUserUseCase implements UseCase<
   GetUserInputDto,

@@ -12,9 +12,9 @@ import { Email } from "../../../domain/user/value-objects/email.vo";
 import { PasswordHash } from "../../../domain/user/value-objects/password-hash.vo";
 import { Password } from "../../../domain/user/value-objects/password.vo";
 import { PasswordHasher } from "../../ports/password-hasher.port";
-import { UserDtoMapper } from "../mappers/user-dto.mapper";
 import { RoleRepository } from "../../../domain/access-control/role/repositories/role.repository";
 import { RoleNotFoundError } from "../../access-control/role/errors/role-not-found.error";
+import { UserDtoMapper } from "../dtos/user.dto";
 
 export class CreateUserUseCase implements UseCase<
   CreateUserInputDto,
@@ -61,7 +61,7 @@ export class CreateUserUseCase implements UseCase<
 
     await this.userRepository.create(user);
 
-    return right(UserDtoMapper.toWithRoleDto(user, role));
+    return right(UserDtoMapper.toDto(user));
   }
 
   private buildCreateUserData(input: CreateUserInputDto): Either<

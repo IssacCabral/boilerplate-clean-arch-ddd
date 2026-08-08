@@ -10,7 +10,7 @@ import { Either, left, right } from "../../../@shared/either.shared";
 import { UserNotFoundError } from "../errors/user-not-found.error";
 import { UseCase } from "../../@shared/usecase.shared";
 import { IError } from "../../../@shared/error.shared";
-import { UserDtoMapper } from "../mappers/user-dto.mapper";
+import { UserDtoMapper } from "../dtos/user.dto";
 
 export class CompleteProfileUseCase implements UseCase<
   CompleteProfileInputDto,
