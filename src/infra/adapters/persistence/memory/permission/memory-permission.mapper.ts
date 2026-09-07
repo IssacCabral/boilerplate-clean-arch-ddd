@@ -1,5 +1,5 @@
-import { PermissionEntity } from "../../../../domain/access-control/permission/entities/permission.entity";
-import { PermissionIdentifier } from "../../../../domain/access-control/permission/enums/permission-identifier.enum";
+import { PermissionEntity } from "../../../../../domain/access-control/permission/entities/permission.entity";
+import { PermissionIdentifier } from "../../../../../domain/access-control/permission/enums/permission-identifier.enum";
 
 export type MemoryPermissionRecord = {
   id: string;

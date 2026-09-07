@@ -1,11 +1,11 @@
-import { PaginationData } from "../../../../@shared/pagination.shared";
-import { UserEntity } from "../../../../domain/user/entities/user.entity";
+import { PaginationData } from "../../../../../@shared/pagination.shared";
+import { UserEntity } from "../../../../../domain/user/entities/user.entity";
 import {
   ListUsersParams,
   UserRepository,
-} from "../../../../domain/user/repositories/user.repository";
-import { Email } from "../../../../domain/user/value-objects/email.vo";
-import { MemoryUserMapper, MemoryUserRecord } from "./memory-user.mapper";
+} from "../../../../../domain/user/repositories/user.repository";
+import { Email } from "../../../../../domain/user/value-objects/email.vo";
+import { MemoryUserMapper, MemoryUserRecord } from "../user/memory-user.mapper";
 
 export class MemoryUserRepository implements UserRepository {
   private users: MemoryUserRecord[] = [];

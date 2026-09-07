@@ -1,13 +1,13 @@
-import { RoleEntity } from "../../../../domain/access-control/role/entities/role.entity";
-import { RoleProps } from "../../../../domain/access-control/role/props/role.props";
-import { UserEntity } from "../../../../domain/user/entities/user.entity";
-import { UserStatus } from "../../../../domain/user/enums/user-status.enum";
-import { DocumentNumber } from "../../../../domain/user/value-objects/document-number.vo";
-import { Email } from "../../../../domain/user/value-objects/email.vo";
-import { PasswordHash } from "../../../../domain/user/value-objects/password-hash.vo";
-import { PhoneNumber } from "../../../../domain/user/value-objects/phone-number.vo";
-import { UserName } from "../../../../domain/user/value-objects/user-name.vo";
-import { MemoryRoleMapper, MemoryRoleRecord } from "./memory-role.mapper";
+import { RoleEntity } from "../../../../../domain/access-control/role/entities/role.entity";
+import { RoleProps } from "../../../../../domain/access-control/role/props/role.props";
+import { UserEntity } from "../../../../../domain/user/entities/user.entity";
+import { UserStatus } from "../../../../../domain/user/enums/user-status.enum";
+import { DocumentNumber } from "../../../../../domain/user/value-objects/document-number.vo";
+import { Email } from "../../../../../domain/user/value-objects/email.vo";
+import { PasswordHash } from "../../../../../domain/user/value-objects/password-hash.vo";
+import { PhoneNumber } from "../../../../../domain/user/value-objects/phone-number.vo";
+import { UserName } from "../../../../../domain/user/value-objects/user-name.vo";
+import { MemoryRoleMapper, MemoryRoleRecord } from "../role/memory-role.mapper";
 
 export type MemoryUserRecord = {
   id: string;

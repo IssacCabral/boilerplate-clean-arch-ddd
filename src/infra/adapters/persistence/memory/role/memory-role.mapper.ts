@@ -1,11 +1,11 @@
-import { PermissionEntity } from "../../../../domain/access-control/permission/entities/permission.entity";
-import { PermissionProps } from "../../../../domain/access-control/permission/props/permission.props";
-import { RoleEntity } from "../../../../domain/access-control/role/entities/role.entity";
-import { RoleIdentifier } from "../../../../domain/access-control/role/enums/role-identifier.enum";
+import { PermissionEntity } from "../../../../../domain/access-control/permission/entities/permission.entity";
+import { PermissionProps } from "../../../../../domain/access-control/permission/props/permission.props";
+import { RoleEntity } from "../../../../../domain/access-control/role/entities/role.entity";
+import { RoleIdentifier } from "../../../../../domain/access-control/role/enums/role-identifier.enum";
 import {
   MemoryPermissionMapper,
   MemoryPermissionRecord,
-} from "./memory-permission.mapper";
+} from "../permission/memory-permission.mapper";
 
 export type MemoryRoleRecord = {
   id: string;
