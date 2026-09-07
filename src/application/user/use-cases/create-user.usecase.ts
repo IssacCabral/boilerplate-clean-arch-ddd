@@ -11,10 +11,10 @@ import { UserEntity } from "../../../domain/user/entities/user.entity";
 import { Email } from "../../../domain/user/value-objects/email.vo";
 import { PasswordHash } from "../../../domain/user/value-objects/password-hash.vo";
 import { Password } from "../../../domain/user/value-objects/password.vo";
-import { PasswordHasher } from "../../ports/password-hasher.port";
 import { RoleRepository } from "../../../domain/access-control/role/repositories/role.repository";
 import { RoleNotFoundError } from "../../access-control/role/errors/role-not-found.error";
 import { UserDtoMapper } from "../dtos/user.dto";
+import { PasswordHasher } from "../../ports/cryptography/password-hasher.port";
 
 export class CreateUserUseCase implements UseCase<
   CreateUserInputDto,
