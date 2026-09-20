@@ -14,6 +14,10 @@ export async function buildServer() {
 export async function startServer(): Promise<void> {
   const app = await buildServer();
 
+  await app.ready();
+
+  console.log(`Available routes: ${app.printRoutes()}`);
+
   await app.listen({
     port: 3333,
     host: "0.0.0.0",
