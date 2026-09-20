@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": [
+    "src/@shared/**/*.ts",
+    "src/domain/**/*.ts",
+    "src/application/**/*.ts",
+    "src/infra/**/*.ts",
+    "src/presentation/**/*.ts",
+    "src/main/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/1-domain",
+    "src/2-application",
+    "src/3-presentation",
+    "src/4-infra"
+  ]
+}
