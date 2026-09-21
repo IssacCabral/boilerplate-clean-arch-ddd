@@ -12,10 +12,13 @@ src/
     user/
   application/
     user/
+  presentation/
+    http/
   infra/
     adapters/
-  presentation/
-    user/
+  main/
+    factories/
+    routes/
 ```
 
 Tradeoff: isso mantém os limites da Clean Architecture explícitos enquanto preserva a coesão do domínio dentro de cada camada.
@@ -59,6 +62,71 @@ src/
 Casos de uso orquestram objetos de domínio e ports. Eles não devem conter detalhes de infraestrutura nem depender de implementações concretas.
 
 Tradeoff: a aplicação também é agrupada por módulo de domínio. Isso mantém os comportamentos de aplicação relacionados a usuário próximos, sem misturar regras de aplicação dentro da camada de domínio.
+
+## Camada de Presentation
+
+A camada de presentation contém a borda HTTP da aplicação.
+
+Exemplo:
+
+```txt
+src/
+  presentation/
+    http/
+      @shared/
+        controller.ts
+        http.ts
+        validation-error.ts
+      user/
+        controllers/
+        validators/
+```
+
+Controllers devem ser pequenos. Eles recebem uma `HttpRequest`, validam dados de entrada com schemas da própria camada de presentation, chamam um use case e traduzem o resultado para `HttpResponse`.
+
+Tradeoff: mantemos controllers independentes do framework HTTP. O controller não conhece `FastifyRequest` nem `FastifyReply`; essa adaptação fica em `main/adapters`.
+
+## Camada Main
+
+A camada `main` é o composition root da aplicação.
+
+Exemplo:
+
+```txt
+src/
+  main/
+    server.ts
+    routes/
+    adapters/
+    factories/
+    decorators/
+```
+
+Ela é responsável por criar instâncias concretas, registrar rotas, escolher adapters, envolver use cases com decorators e iniciar o servidor HTTP.
+
+Tradeoff: `main` pode depender das demais camadas porque está na borda mais externa da aplicação. As demais camadas não devem depender de `main`.
+
+## HTTP, Rotas e Validação
+
+O projeto usa Fastify como framework HTTP e Zod para validação de entrada.
+
+Rotas ficam em `main/routes`, porque fazem parte do bootstrap da aplicação e conectam o framework HTTP aos controllers.
+
+Exemplo:
+
+```txt
+main/routes/user.routes.ts
+```
+
+Schemas de validação ficam na camada de presentation, próximos dos controllers HTTP.
+
+Exemplo:
+
+```txt
+presentation/http/user/validators/create-user.schema.ts
+```
+
+Tradeoff: Fastify e Zod são detalhes das bordas da aplicação. O domínio e a aplicação não dependem dessas bibliotecas.
 
 ## Erros
 
@@ -130,14 +198,14 @@ Erros inesperados, como falha de banco, bug em mapper, falha de adapter ou incon
 
 Por padrão, use cases não devem envolver todo o fluxo em `try/catch` genérico.
 
-Tradeoff: isso mantém o use case focado em regras de aplicação e evita mascarar bugs como erros genéricos. Falhas inesperadas devem ser tratadas na borda da aplicação ou por um decorator por composição.
+Tradeoff: isso mantém o use case focado em regras de aplicação e evita mascarar bugs como erros genéricos. Falhas inesperadas são tratadas na borda da aplicação por um decorator por composição.
 
-Exemplo futuro:
+Exemplo atual:
 
 ```txt
 Controller
-  -> SafeUseCaseDecorator
-    -> CreateUserUseCase
+  -> SafeUseCase
+    -> UseCase concreto
 ```
 
 ## Código Compartilhado
@@ -161,7 +229,7 @@ Port:    PasswordHasher
 Adapter: BcryptPasswordHasher
 
 Port:    EmailSender
-Adapter: ResendEmailSender
+Adapter: SmtpEmailSender
 
 Port:    QueuePublisher
 Adapter: BullQueuePublisher
@@ -173,9 +241,12 @@ Estrutura recomendada:
 src/
   application/
     ports/
-      password-hasher.port.ts
-      email-sender.port.ts
-      queue-publisher.port.ts
+      cryptography/
+        password-hasher.port.ts
+      email/
+        email-sender.port.ts
+      queue/
+        queue-publisher.port.ts
 
   infra/
     adapters/
@@ -312,12 +383,11 @@ Exemplo:
 
 ```txt
 MemoryUserRecord <-> UserEntity
-PrismaUser       <-> UserEntity
 ```
 
 Cada adapter deve ter sua própria tipagem de persistência.
 
-Exemplos:
+Exemplos possíveis:
 
 ```txt
 MemoryUserRecord
@@ -327,7 +397,7 @@ MongoUserDocument
 
 Esses tipos não devem vazar para domínio ou aplicação.
 
-`toEntity()` deve reconstruir a entidade usando `hydrate()` na entidade e `restore()` nos value objects.
+`toDomain()` deve reconstruir a entidade usando `hydrate()` na entidade e `restore()` nos value objects.
 
 `toPersistence()` deve converter a entidade para o formato esperado pelo adapter, usando valores primitivos quando apropriado.
 
