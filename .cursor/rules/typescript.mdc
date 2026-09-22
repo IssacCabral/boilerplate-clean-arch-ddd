@@ -1,0 +1,16 @@
+---
+description: TypeScript implementation conventions for this backend boilerplate
+globs: **/*.ts
+alwaysApply: false
+---
+
+# TypeScript Rules
+
+- Prefer explicit interfaces and types for public contracts.
+- Keep classes small and constructor dependencies explicit.
+- Do not instantiate infrastructure inside use cases or controllers.
+- Prefer domain value objects over primitives when a value has domain meaning.
+- Keep DTOs in the application layer and HTTP schemas in presentation.
+- Run `pnpm typecheck` after meaningful TypeScript changes.
+- Do not introduce framework-specific types outside the layer that owns the framework.
+- Preserve existing file naming conventions: `*.usecase.ts`, `*.controller.ts`, `*.repository.ts`, `*.mapper.ts`, `*.port.ts`.

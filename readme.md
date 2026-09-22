@@ -195,6 +195,48 @@ Rode o typecheck:
 pnpm typecheck
 ```
 
+## Uso Com IA
+
+Este repositório inclui arquivos para orientar agentes de IA durante manutenção e evolução do código.
+
+Rules do Cursor:
+
+```txt
+.cursor/rules/
+  architecture.mdc
+  domain-modeling.mdc
+  typescript.mdc
+  http-presentation.mdc
+```
+
+Templates de spec:
+
+```txt
+docs/specs/
+  feature-template.md
+  endpoint-template.md
+  use-case-template.md
+```
+
+Checklists:
+
+```txt
+docs/checklists/
+  add-http-endpoint.md
+  add-use-case.md
+  add-persistence-adapter.md
+```
+
+Fluxo recomendado:
+
+```txt
+1. Criar uma spec curta antes de implementar mudanças maiores.
+2. Revisar a spec.
+3. Implementar seguindo as rules e checklists.
+4. Rodar pnpm typecheck.
+5. Atualizar docs quando surgir uma nova decisão arquitetural.
+```
+
 ## Documentação
 
 Algumas decisões arquiteturais estão documentadas em:
@@ -202,6 +244,8 @@ Algumas decisões arquiteturais estão documentadas em:
 ```txt
 docs/architecture-decisions.md
 docs/ddd-building-blocks.md
+docs/specs/
+docs/checklists/
 ```
 
 Esses documentos explicam conceitos e tradeoffs adotados durante a evolução do projeto.

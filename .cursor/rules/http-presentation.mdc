@@ -1,0 +1,17 @@
+---
+description: HTTP presentation and Fastify wiring conventions
+globs: src/{presentation,main}/**/*.ts
+alwaysApply: false
+---
+
+# HTTP Presentation Rules
+
+- Use one controller per HTTP action.
+- Controllers receive `HttpRequest` and return `HttpResponse`.
+- Controllers must not import `FastifyRequest` or `FastifyReply`.
+- Validate HTTP input with Zod schemas in `presentation/http/**/validators`.
+- Convert Zod errors with `makeValidationError`.
+- Register Fastify routes in `main/routes`.
+- Adapt Fastify handlers with `main/adapters/fastify-route.adapter.ts`.
+- Create controller factories in `main/factories/presentation`.
+- Keep request/response translation in presentation; keep business orchestration in application use cases.

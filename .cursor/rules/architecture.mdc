@@ -1,0 +1,39 @@
+---
+description: Clean Architecture, DDD and Ports and Adapters conventions for this project
+alwaysApply: true
+---
+
+# Architecture Rules
+
+- Organize code first by architectural layer, then by domain module.
+- Keep `domain` independent from `application`, `presentation`, `infra` and `main`.
+- Keep `application` independent from `presentation`, `infra` and `main`.
+- Use use cases for application orchestration.
+- Use `Either` for expected domain/application errors.
+- Do not wrap use cases in generic `try/catch`.
+- Let unexpected technical errors bubble to `SafeUseCase` in `main`.
+- Keep repository interfaces near the domain module they represent.
+- Put concrete adapters in `infra/adapters`.
+- Put composition, factories, route registration and framework wiring in `main`.
+- Add abstractions only when they match an existing pattern or remove real duplication.
+
+# Module Organization
+
+- Do not create global folders like `domain/entities` or `application/use-cases`.
+- Domain files go under `domain/<module>`.
+- Application files go under `application/<module>`.
+- HTTP files go under `presentation/http/<module>`.
+- Persistence adapters go under `infra/adapters/persistence/<technology>/<module>`.
+- Main factories mirror what they compose:
+  - `main/factories/application/<module>`
+  - `main/factories/presentation/http/<module>`
+  - `main/factories/infra/persistence/<module>`
+
+Example for a `product` module:
+
+```txt
+domain/product/entities/product.entity.ts
+application/product/use-cases/create-product.usecase.ts
+presentation/http/product/controllers/create-product.controller.ts
+infra/adapters/persistence/memory/product/memory-product.repository.ts
+```

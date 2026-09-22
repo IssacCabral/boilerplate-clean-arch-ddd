@@ -1,0 +1,19 @@
+---
+description: Domain modeling conventions for entities, value objects, aggregates and persistence reconstruction
+globs: src/domain/**/*.ts
+alwaysApply: false
+---
+
+# Domain Modeling Rules
+
+- Use entities for domain concepts with identity.
+- Use value objects for values with domain meaning, validation or behavior.
+- Do not create value objects for every primitive by default.
+- Prefer `create()` for external input validation and return `Either` for expected errors.
+- Prefer `restore()` when rebuilding value objects from persistence.
+- Use `hydrate()` when rebuilding entities from persisted state.
+- Keep domain entities independent from HTTP, ORM, Fastify, Zod and database records.
+- Keep persistence records out of domain and application layers.
+- Keep invariants inside entities or value objects when they belong to the domain.
+- Prefer aggregate boundaries over loading unrelated object graphs by default.
+- If a value object is reused across modules, consider moving it to a shared domain location only when it represents the same concept.
